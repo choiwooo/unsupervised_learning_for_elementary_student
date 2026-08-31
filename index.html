@@ -1,80 +1,78 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>우리 반 데이터 군집 탐색</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>우리 반 데이터 탐색</title>
+  <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
 <body>
-  <main class="container">
-    <header>
-      <p class="eyebrow">K-MEANS CLASSROOM LAB</p>
-      <h1>우리 반 친구들은 어떻게 모일까?</h1>
-      <p class="subtitle">생활 속 숫자 데이터를 입력하고 비슷한 특징을 가진 친구들을 찾아보세요.</p>
-    </header>
+<main class="wrap">
+  <div class="madeby">made by ChoiWooo</div>
+  <header>
+    <h1>우리 반 친구들은 어떻게 모일까?</h1>
+    <p>생활 속 숫자를 입력하면 비슷한 특징을 가진 친구들을 자동으로 찾아줍니다.</p>
+  </header>
+
+  <section class="card">
+    <div class="top">
+      <div>
+        <h2>1. 데이터 넣기</h2>
+        <p>직접 고치거나 같은 형식의 CSV·Excel 파일을 올릴 수 있어요.</p>
+      </div>
+      <div class="actions">
+        <input id="fileInput" type="file" accept=".csv,.xlsx,.xls">
+        <button id="resetBtn" class="sub">예시 데이터</button>
+        <button id="runBtn">분석하기</button>
+      </div>
+    </div>
+    <div id="message" class="message"></div>
+    <div class="tableBox">
+      <table id="dataTable"><thead></thead><tbody></tbody></table>
+    </div>
+  </section>
+
+  <section id="results" class="hidden">
+    <section class="card">
+      <div class="top">
+        <div>
+          <h2>2. 가장 잘 나뉘는 그룹</h2>
+          <p>여러 가지 그룹 수를 비교해서 가장 잘 나뉘는 경우를 자동으로 골랐어요.</p>
+        </div>
+        <div id="bestGroup" class="best"></div>
+      </div>
+      <div class="chartSmall"><canvas id="scoreChart"></canvas></div>
+    </section>
 
     <section class="card">
-      <div class="section-head">
+      <div class="top">
         <div>
-          <h2>1. 데이터 입력</h2>
-          <p>각 칸의 숫자를 자유롭게 바꿀 수 있습니다.</p>
+          <h2>3. 친구들이 어떻게 나뉘었을까?</h2>
+          <p>같은 색의 점은 비슷한 특징을 가진 친구들이에요.</p>
         </div>
-        <div class="controls">
-          <span class="auto-k">최적 군집 수 자동 선택 (Silhouette)</span>
-          <button id="resetBtn" class="secondary">예시 데이터 복원</button>
-          <button id="runBtn">분석하기</button>
-        </div>
+        <div id="groupCounts" class="badges"></div>
       </div>
+      <div class="chartBig"><canvas id="clusterChart"></canvas></div>
+    </section>
 
-      <div class="table-wrap">
-        <table id="dataTable">
-          <thead></thead>
+    <section class="card">
+      <h2>4. 학생별 그룹</h2>
+      <div class="tableBox compact">
+        <table id="resultTable">
+          <thead><tr><th>학생</th><th>그룹</th></tr></thead>
           <tbody></tbody>
         </table>
       </div>
     </section>
 
-    <section id="results" class="results hidden">
-      <div class="card">
-        <div class="section-head">
-          <div>
-            <h2>2. 군집 결과</h2>
-            <p>같은 색은 K-means가 비슷하다고 판단한 학생들입니다.</p>
-          </div>
-          <div id="summaryBadges" class="badges"></div>
-        </div>
-
-        <div id="silhouetteBox" class="silhouette-box"></div>
-        <div class="chart-box">
-          <canvas id="clusterChart"></canvas>
-        </div>
-        <p class="note">※ 최적 k는 표준화된 10개 변수에서 평균 Silhouette score가 가장 큰 값을 선택합니다. PCA는 시각화에만 사용합니다.</p>
-      </div>
-
-      <section class="card">
-        <h2>3. 학생별 군집</h2>
-        <div class="table-wrap compact">
-          <table id="resultTable">
-            <thead>
-              <tr><th>학생</th><th>군집</th></tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-      </section>
-
-      <section class="card">
-        <h2>4. 군집별 평균 특징</h2>
-        <p class="small">각 군집 학생들의 원래 값 평균입니다.</p>
-        <div class="table-wrap compact">
-          <table id="meanTable"></table>
-        </div>
-      </section>
+    <section class="card">
+      <h2>5. 각 그룹의 평균 특징</h2>
+      <div class="tableBox compact"><table id="meanTable"></table></div>
     </section>
-  </main>
-
-  <script src="app.js"></script>
+  </section>
+</main>
+<script src="app.js"></script>
 </body>
 </html>
